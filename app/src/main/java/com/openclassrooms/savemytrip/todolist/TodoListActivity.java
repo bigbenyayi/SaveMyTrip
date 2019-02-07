@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -51,6 +52,8 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
     TextView profileText;
     @BindView(R.id.imageSelection)
     ImageView imageSelection;
+
+    Uri selectedPictureUri;
 
     // FOR DATA
     private ItemViewModel itemViewModel;
@@ -98,7 +101,9 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            imageSelection.setImageBitmap(mBitmap);
+            //   imageSelection.setImageBitmap(mBitmap);
+            imageSelection.setImageURI(chosenImageUri);
+            selectedPictureUri = chosenImageUri;
         }
 
     }
@@ -111,7 +116,6 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
     @OnClick(R.id.todo_list_activity_button_add)
     public void onClickAddButton() {
         this.createItem();
-        imageSelection.setImageDrawable(getDrawable(R.drawable.ic_image_black_24dp));
     }
 
     @Override
@@ -141,9 +145,17 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
         this.itemViewModel.getItems(userId).observe(this, this::updateItemsList);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void createItem() {
-        Item item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID);
+        Item item;
+        if (selectedPictureUri == null) {
+            item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID, null);
+        } else {
+            item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID, this.selectedPictureUri.toString());
+        }
         this.editText.setText("");
+        imageSelection.setImageDrawable(getDrawable(R.drawable.ic_image_black_24dp));
+        selectedPictureUri = Uri.parse("");
         this.itemViewModel.createItem(item);
     }
 

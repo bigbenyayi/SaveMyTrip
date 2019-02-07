@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.ContentValues;
+import android.net.Uri;
 
 /**
  * Created by Philippe on 08/03/2018.
@@ -20,14 +21,16 @@ public class Item {
     private int category;
     private Boolean isSelected;
     private long userId;
+    private String image;
 
     public Item() { }
 
-    public Item(String text, int category, long userID) {
+    public Item(String text, int category, long userID, String image) {
         this.text = text;
         this.category = category;
         this.userId = userID;
         this.isSelected = false;
+        this.image = image;
     }
 
     // --- GETTER ---
@@ -36,6 +39,7 @@ public class Item {
     public int getCategory() { return category; }
     public Boolean getSelected() { return isSelected; }
     public long getUserId() { return userId; }
+    public String getImage() { return image; }
 
     // --- SETTER ---
     public void setId(long id) { this.id = id; }
@@ -43,6 +47,7 @@ public class Item {
     public void setCategory(int category) { this.category = category; }
     public void setSelected(Boolean selected) { isSelected = selected; }
     public void setUserId(long userId) { this.userId = userId; }
+    public void setImage(String image) { this.image = image; }
 
     // --- UTILS ---
     public static Item fromContentValues(ContentValues values) {

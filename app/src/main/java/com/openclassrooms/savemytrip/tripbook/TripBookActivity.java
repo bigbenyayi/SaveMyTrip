@@ -40,8 +40,8 @@ public class TripBookActivity extends BaseActivity {
     @BindView(R.id.trip_book_activity_edit_text) EditText editText;
 
     // FILE PURPOSE
-    private static final String FILENAME = "tripBook.txt";
-    private static final String FOLDERNAME = "bookTrip";
+    public static final String FILENAME = "tripBook.txt";
+    public static final String FOLDERNAME = "bookTrip";
     private static final String AUTHORITY="com.openclassrooms.savemytrip.fileprovider";
 
     // PERMISSION PURPOSE
