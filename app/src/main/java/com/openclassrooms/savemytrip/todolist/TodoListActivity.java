@@ -3,6 +3,7 @@ package com.openclassrooms.savemytrip.todolist;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -95,14 +96,7 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
         if (resultCode == RESULT_OK) {
             Uri chosenImageUri = data.getData();
 
-            Bitmap mBitmap = null;
-            try {
-                mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), chosenImageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //   imageSelection.setImageBitmap(mBitmap);
-            imageSelection.setImageURI(chosenImageUri);
+            imageSelection.setImageURI((chosenImageUri));
             selectedPictureUri = chosenImageUri;
         }
 
@@ -139,6 +133,23 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
         this.itemViewModel.getUser(userId).observe(this, this::updateHeader);
     }
 
+    //For a successful Uri --> String conversion
+    private String getFilePathFromContentUri(Uri selectedVideoUri) {
+        String filePath = null;
+        String[] filePathColumn = {MediaStore.MediaColumns.DATA};
+
+        Cursor cursor = getContentResolver().query(selectedVideoUri, filePathColumn, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        filePath = cursor.getString(columnIndex);
+        cursor.close();
+        }
+        return filePath;
+
+    }
+
     // ---
 
     private void getItems(int userId) {
@@ -151,7 +162,7 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
         if (selectedPictureUri == null) {
             item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID, null);
         } else {
-            item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID, this.selectedPictureUri.toString());
+            item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID, getFilePathFromContentUri(selectedPictureUri));
         }
         this.editText.setText("");
         imageSelection.setImageDrawable(getDrawable(R.drawable.ic_image_black_24dp));
