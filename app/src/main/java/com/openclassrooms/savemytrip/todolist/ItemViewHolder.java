@@ -77,12 +77,20 @@ public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         }
         shareButton.setOnClickListener(v -> {
 
-
+/*
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("image/*");
             sharingIntent.putExtra(Intent.EXTRA_STREAM, item.getImage());
             mContext.startActivity(Intent.createChooser(sharingIntent,"Sharing picture"));
-
+*/
+            Uri imageUri = Uri.parse("android.resource://" + mContext.getPackageName()
+                    + "/drawable/" + "ic_image_black_24dp");
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+            shareIntent.setType("image/*");
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            mContext.startActivity(Intent.createChooser(shareIntent, "send"));
 
         });
 

@@ -162,7 +162,7 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
         if (selectedPictureUri == null) {
             item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID, null);
         } else {
-            item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID, getFilePathFromContentUri(selectedPictureUri));
+            item = new Item(this.editText.getText().toString(), this.spinner.getSelectedItemPosition(), USER_ID, selectedPictureUri.toString());
         }
         this.editText.setText("");
         imageSelection.setImageDrawable(getDrawable(R.drawable.ic_image_black_24dp));
