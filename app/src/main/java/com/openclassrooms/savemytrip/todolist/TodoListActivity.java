@@ -84,7 +84,7 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
         imageSelection.setOnClickListener(v -> {
 
             //Get data from phone and select a PHOTO
-            Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, 1);
         });
@@ -94,6 +94,15 @@ public class TodoListActivity extends BaseActivity implements ItemAdapter.Listen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+
+            Uri sourceTreeUri = data.getData();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                getContentResolver().takePersistableUriPermission(
+                    sourceTreeUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                );
+            }
+
             Uri chosenImageUri = data.getData();
 
             imageSelection.setImageURI((chosenImageUri));
