@@ -56,6 +56,7 @@ public class Item {
         if (values.containsKey("category")) item.setCategory(values.getAsInteger("category"));
         if (values.containsKey("isSelected")) item.setSelected(values.getAsBoolean("isSelected"));
         if (values.containsKey("userId")) item.setUserId(values.getAsLong("userId"));
+        if (values.containsKey("image")) item.setImage(values.getAsString("image"));
         return item;
     }
 }
